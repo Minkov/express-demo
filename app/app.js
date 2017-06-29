@@ -4,17 +4,29 @@ const express = require('express');
 
 const app = express();
 
-require('./config/app.config')(app);
+const data = require('./data');
 
-app.get('/404', (req, res) => {
-    return res.send('<h1>Error</h1>');
-});
+const init = async () => {
+    require('./config/app.config')(app);
+    await require('./config/auth.config')(app, data);
 
-app.get('/', (req, res) => {
-    return res.render('home');
-});
+    app.use((req, res, next) => {
+        console.log(' --- Current user ---');
+        console.log(req.user);
+        next();
+    });
 
-require('./routes')(app);
+    app.get('/404', (req, res) => {
+        return res.send('<h1>Error</h1>');
+    });
 
+    app.get('/', (req, res) => {
+        return res.render('home');
+    });
+
+    require('./routes')(app);
+};
+
+init();
 
 module.exports = app;
