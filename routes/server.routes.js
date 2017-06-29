@@ -1,5 +1,13 @@
 const { Router } = require('express');
 
+const items = [{
+    id: 1,
+    name: 'Cuki',
+}, {
+    id: 2,
+    name: 'John',
+}];
+
 const attach = (app) => {
     const router = new Router();
 
@@ -15,13 +23,22 @@ const attach = (app) => {
                 interests: ['Math', 'JS'],
             });
         }).get('/all', (req, res) => {
-            res.send(`<h1>All</h1>
-    <ul>
-        <li><a href="#item-1">Go to Item 1</a></li>
-        <li><a href="#item-2">Go to Item 2</a></li>
-        <li><a href="#item-3">Go to Item 3</a></li>
-    </ul>
-        `);
+            res.render('all', {
+                model: items,
+            });
+        })
+        .get('/:id', (req, res, next) => {
+            console.log(req.user);
+            const id = parseInt(req.params.id, 10);
+            const item = items.find((i) => i.id === id);
+
+            if (!item) {
+                return res.redirect('/404');
+            }
+
+            return res.render('details', {
+                model: item,
+            });
         });
 
     app.use('/', router);
