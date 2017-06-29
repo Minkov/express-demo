@@ -1,12 +1,10 @@
-/* globals __dirname */
-
 const express = require('express');
 
 const app = express();
 
 const data = require('./data');
 
-const init = async () => {
+const init = async() => {
     require('./config/app.config')(app);
     await require('./config/auth.config')(app, data);
 

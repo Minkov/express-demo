@@ -6,9 +6,9 @@ const { Strategy } = require('passport-local');
 const { MongoClient } = require('mongodb');
 const MongoStore = require('connect-mongo')(session);
 
-const hashPass = (password) => {
-    return '!' + password + '!';
-};
+// const hashPass = (password) => {
+//     return '!' + password + '!';
+// };
 
 const configAuth = (app, { users }) => {
     return MongoClient.connect('mongodb://localhost/items-auth')
