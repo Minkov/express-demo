@@ -33,6 +33,15 @@ const configApp = (app) => {
 
         done();
     });
+
+    app.use((req, res, next) => {
+        const { err } = req.query;
+        if (err) {
+            res.locals = res.locals || {};
+            res.locals.err = err;
+        }
+        next();
+    });
 };
 
 module.exports = configApp;

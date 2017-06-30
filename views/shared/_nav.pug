@@ -7,6 +7,17 @@ mixin nav
             li
                 a(href='/items')
                     | Items
-            li
-                a(href='/auth/sign-in')
-                    | Sign in
+            if user
+                li
+                    a(href="/profile")
+                        =user.username
+                li
+                    a(href="/auth/sign-out")
+                        | Sign out
+            else
+                li
+                    a(href='/auth/sign-up')
+                        | Sign up
+                li
+                    a(href='/auth/sign-in')
+                        | Sign in

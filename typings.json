@@ -2,6 +2,7 @@
   "globalDependencies": {
     "bootstrap": "registry:dt/bootstrap#3.3.5+20160726204056",
     "express-session": "registry:dt/express-session#0.0.0+20161119044246",
+    "lowdb": "registry:dt/lowdb#0.15.0+20170308104825",
     "passport": "registry:dt/passport#0.3.0+20170207191958",
     "pug": "registry:dt/pug#2.0.0+20161229235626"
   }

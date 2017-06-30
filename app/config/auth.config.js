@@ -6,21 +6,31 @@ const { Strategy } = require('passport-local');
 const { MongoClient } = require('mongodb');
 const MongoStore = require('connect-mongo')(session);
 
-// const hashPass = (password) => {
-//     return '!' + password + '!';
-// };
+const getSession = () => {
+    return session({
+        secret: 'Purple Unicorn',
+        maxAge: new Date(Date.now() + 1000),
+    });
+
+    /** Disabled mongo session (bug when users are not persistent **/
+    // return session({
+    //     secret: 'Purple Unicorn',
+    //     maxAge: new Date(Date.now() + 1000),
+    //     store: new MongoStore({ db }, (err) => {
+    //         // eslint-ignore-next-line no-console
+    //         console.log(err || 'connect-mongodb setup ok');
+    //     }),
+    // });
+};
+
 
 const configAuth = (app, { users }) => {
     return MongoClient.connect('mongodb://localhost/items-auth')
         .then((db) => {
             passport.use(new Strategy(
                 (username, password, done) => {
-                    return users.findByUsername(username)
+                    return users.signIn(username, password)
                         .then((user) => {
-                            if (user.password !== password) {
-                                done(new Error('Invalid password'));
-                            }
-
                             return done(null, user);
                         })
                         .catch((err) => {
@@ -30,15 +40,8 @@ const configAuth = (app, { users }) => {
             ));
 
             app.use(cookieParser());
-            app.use(session({
-                secret: 'Purple Unicorn',
-                maxAge: new Date(Date.now() + 1000),
-                store: new MongoStore(
-                    { db },
-                    (err) => {
-                        console.log(err || 'connect-mongodb setup ok');
-                    }),
-            }));
+            app.use(getSession());
+
             app.use(passport.initialize());
             app.use(passport.session());
 
@@ -52,6 +55,14 @@ const configAuth = (app, { users }) => {
                         done(null, user);
                     })
                     .catch(done);
+            });
+
+            // User can be referenced from views
+            app.use((req, res, next) => {
+                res.locals = res.locals || {};
+
+                res.locals.user = req.user;
+                next();
             });
         });
 };

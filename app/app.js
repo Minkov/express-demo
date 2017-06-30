@@ -2,15 +2,13 @@ const express = require('express');
 
 const app = express();
 
-const data = require('./data');
-
-const init = async() => {
+const init = async () => {
     require('./config/app.config')(app);
+
+    const data = await require('./data')();
     await require('./config/auth.config')(app, data);
 
     app.use((req, res, next) => {
-        console.log(' --- Current user ---');
-        console.log(req.user);
         next();
     });
 
@@ -22,7 +20,7 @@ const init = async() => {
         return res.render('home');
     });
 
-    require('./routes')(app);
+    require('./routes')(app, data);
 };
 
 init();

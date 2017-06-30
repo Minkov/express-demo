@@ -1,44 +1,33 @@
 const { Router } = require('express');
 
-const items = [{
-    id: 1,
-    name: 'Cuki',
-}, {
-    id: 2,
-    name: 'John',
-}];
-
-const attach = (app) => {
+const attach = (app, { items }) => {
     const router = new Router();
 
     router
         .get('/', (req, res) => {
-            res.render('items/all', {
-                model: items,
-            });
+            return items.getAll()
+                .then((itemsList) => {
+                    res.render('items/all', {
+                        model: itemsList,
+                    });
+                });
         })
         .get('/form', (req, res) => {
             return res.render('items/form');
         })
         .get('/:id', (req, res) => {
-            console.log(req.user);
-            const id = parseInt(req.params.id, 10);
-            const item = items.find((i) => i.id === id);
-
-            if (!item) {
-                return res.redirect('/404');
-            }
-
-            return res.render('items/details', {
-                model: item,
-            });
+            return items.getById(req.params.id)
+                .then((item) => {
+                    return res.render('items/details', {
+                        model: item,
+                    });
+                });
         })
         .post('/', (req, res) => {
-            const item = req.body;
-            console.log(item);
-            item.id = items.length + 1;
-            items.push(item);
-            return res.redirect('/items');
+            return items.create(req.body.name)
+                .then((item) => {
+                    return res.redirect('/items');
+                });
         });
 
     app.use('/items', router);

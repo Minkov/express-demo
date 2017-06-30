@@ -1,0 +1,23 @@
+{
+  "items": [
+    {
+      "name": "Cuki",
+      "id": "f6ac6f8e-700a-4729-8e5c-a5ff8118a271"
+    },
+    {
+      "name": "John",
+      "id": "cb118162-0037-4470-91ed-5d9b0d9de4b1"
+    },
+    {
+      "name": "Jane",
+      "id": "eb29bb8b-3121-48c1-b32c-3c72512eae51"
+    }
+  ],
+  "users": [
+    {
+      "username": "Doncho",
+      "passhash": "!123456qw*",
+      "id": "8c6c24f7-fc9a-48bf-9a9f-1af197727bae"
+    }
+  ]
+}

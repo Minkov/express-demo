@@ -1,35 +1,14 @@
-const usersList = [{
-    id: 1,
-    username: 'Cuki',
-    password: 'MR4ZQ_W1ND0W$!',
-}];
+/* globals __dirname */
 
-const users = {
-    findById(id) {
-        id = parseInt(id, 10);
-        const user =
-            usersList.find((u) => u.id === id);
-        return new Promise((resolve, reject) => {
-            if (!user) {
-                return reject('No such user');
-            }
-            return resolve(user);
+const path = require('path');
+
+module.exports = () => {
+    const connectionString = path.join(__dirname, '../db/db.json');
+    return require('../db')(connectionString)
+        .then((db) => {
+            return {
+                users: require('./datas/users.data')(db),
+                items: require('./datas/items.data')(db),
+            };
         });
-    },
-    findByUsername(username) {
-        const usernameToLower = username.toLowerCase();
-        const user =
-            usersList.find((u) => u.username.toLowerCase() === usernameToLower);
-
-        return new Promise((resolve, reject) => {
-            if (!user) {
-                return reject('No such user');
-            }
-            return resolve(user);
-        });
-    },
-};
-
-module.exports = {
-    users,
 };

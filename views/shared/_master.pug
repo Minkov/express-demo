@@ -15,6 +15,9 @@ head
 body
     .nav
         +nav
+    if err
+        h1
+            =err
     block body
     block body_end_scripts
         
